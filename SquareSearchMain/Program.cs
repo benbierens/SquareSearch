@@ -22,8 +22,10 @@ var mainHandlers = new MuxingContentHandler(
     indexingQueue
 );
 
+var robots = new Robots();
+robots.Start();
 var ingestionQueue = new ContentQueue(mainHandlers);
-var visitor = new Visitor(urlQueue, ingestionQueue);
+var visitor = new Visitor(urlQueue, robots, ingestionQueue);
 
 var option = Console.ReadLine();
 var loop = true;
@@ -34,7 +36,7 @@ while (loop)
         ingestionQueue.Start();
         visitor.Start();
 
-        Thread.Sleep(60000);
+        Thread.Sleep(10000);
 
         visitor.Stop();
         ingestionQueue.Stop();
@@ -56,6 +58,7 @@ while (loop)
     }
 }
 
+robots.Stop();
 indexingQueue.Stop();
 searchIndex.Stop();
 urlQueue.Stop();

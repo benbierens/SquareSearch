@@ -8,12 +8,13 @@
     public class Visitor : ThreadedComponent
     {
         private readonly CrawlQueue queue;
+        private readonly Robots robots;
         private readonly IContentHandler handler;
-        private readonly HttpClient client = new HttpClient();
 
-        public Visitor(CrawlQueue queue, IContentHandler handler)
+        public Visitor(CrawlQueue queue, Robots robots, IContentHandler handler)
         {
             this.queue = queue;
+            this.robots = robots;
             this.handler = handler;
         }
 
@@ -21,12 +22,9 @@
         {
             var url = queue.Pop(Ct);
 
-            var task1 = client.GetAsync(url);
-            task1.Wait();
-            var a = task1.Result;
-            var task2 = a.Content.ReadAsStringAsync();
-            task2.Wait();
-            var content = task2.Result;
+            if (!robots.IsAllowed(url)) return;
+
+            var content = Web.Get(url);
 
             handler.OnContent(new RawPage(url, content));
         }

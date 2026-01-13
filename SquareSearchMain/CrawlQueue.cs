@@ -1,11 +1,10 @@
 ﻿using System.Collections.Concurrent;
-using System.Text.Json;
 
 namespace SquareSearchMain
 {
-    public class CrawlQueue : IStartStop
+    public class CrawlQueue : JsonFile<QueueModel>
     {
-        private const string filename = "crawlqueue.json";
+        protected override string Filename => "crawlqueue.json";
         private readonly BlockingCollection<string> queue = new BlockingCollection<string>();
 
         public void Push(string url)
@@ -20,25 +19,19 @@ namespace SquareSearchMain
             return queue.Take(ct);
         }
 
-        public void Start()
+        protected override void OnStartFinished()
         {
-            if (File.Exists(filename))
-            {
-                try
-                {
-                    var entries = JsonSerializer.Deserialize<string[]>(File.ReadAllText(filename));
-                    if (entries != null)
-                    {
-                        foreach (var e in entries) Push(e);
-                    }
-                }
-                catch { }
-            }
+            foreach (var e in Model.Queue) Push(e);
         }
 
-        public void Stop()
+        protected override void OnStopStarted()
         {
-            File.WriteAllText(filename, JsonSerializer.Serialize(queue.ToArray()));
+            Model.Queue = queue.ToList();
         }
+    }
+
+    public class QueueModel
+    {
+        public List<string> Queue = new List<string>();
     }
 }
