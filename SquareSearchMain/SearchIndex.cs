@@ -22,14 +22,15 @@ namespace SquareSearchMain
 
         public string[] Search(string query)
         {
-            var tokens = query.ToLowerInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var tokens = Tokenize.This(query);
+
             var bestCount = 0;
             var bestEntry = new IndexEntry();
 
             foreach (var entry in entries)
             {
                 var score = GetScore(entry, tokens);
-                Console.WriteLine($" '{entry.Url}' = {score}");
+                //Console.WriteLine($" '{entry.Url}' = {score}");
                 if (score > bestCount)
                 {
                     bestCount = score;
@@ -47,7 +48,11 @@ namespace SquareSearchMain
             {
                 foreach (var c in entry.Counts)
                 {
-                    if (c.Token == t) score += c.Count;
+                    if (c.Token == t)
+                    {
+                        Console.WriteLine($"token '{t}' found in {entry.Url} for a score of {c.Count}");
+                        score += c.Count;
+                    }
                 }
             }
             return score;

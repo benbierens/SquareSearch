@@ -34,7 +34,7 @@ while (loop)
         ingestionQueue.Start();
         visitor.Start();
 
-        Thread.Sleep(10000);
+        Thread.Sleep(60000);
 
         visitor.Stop();
         ingestionQueue.Stop();

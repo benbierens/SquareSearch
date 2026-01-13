@@ -22,10 +22,21 @@ namespace SquareSearchMain
                     var s = m.ToString();
                     if (!string.IsNullOrEmpty(s))
                     {
-                        queue.Push(s);
+                        Consider(s);
                     }
                 }
             }
+        }
+
+        private void Consider(string s)
+        {
+            if (s.EndsWith(".js")) return;
+            if (s.EndsWith(".svg")) return;
+            if (s.EndsWith(".png")) return;
+            if (s.EndsWith(".jpg")) return;
+            if (s.EndsWith(".css")) return;
+
+            queue.Push(s);
         }
     }
 }

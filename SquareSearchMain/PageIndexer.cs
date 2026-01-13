@@ -11,7 +11,8 @@
 
         public void OnContent(RawPage rawPage)
         {
-            var tokens = rawPage.Content.ToLowerInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var tokens = Tokenize.This(rawPage.Content);
+                
             var counts = new Dictionary<string, int>();
             foreach (var token in tokens)
             {
