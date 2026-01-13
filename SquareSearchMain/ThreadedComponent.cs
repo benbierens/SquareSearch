@@ -38,7 +38,10 @@ namespace SquareSearchMain
                 {
                     DoWork();
                 }
-                catch (TaskCanceledException ex)
+                catch (TaskCanceledException)
+                {
+                }
+                catch (OperationCanceledException)
                 {
                 }
                 catch (Exception ex)
