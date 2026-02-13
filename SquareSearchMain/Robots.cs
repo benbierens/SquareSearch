@@ -1,4 +1,6 @@
-﻿namespace SquareSearchMain
+﻿using Common;
+
+namespace SquareSearchMain
 {
     public class Robots : JsonFile<RobotsModel>
     {

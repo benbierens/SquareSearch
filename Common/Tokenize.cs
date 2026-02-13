@@ -1,4 +1,4 @@
-﻿namespace SquareSearchMain
+﻿namespace Common
 {
     public class Tokenize
     {

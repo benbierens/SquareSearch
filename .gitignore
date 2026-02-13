@@ -1,3 +1,11 @@
 ﻿.vs
 SquareSearchMain/obj
 SquareSearchMain/bin
+Logging/obj
+MessageQueue/obj
+Visitor/obj
+Common/obj
+Common/bin
+Logging/bin
+MessageQueue/bin
+Visitor/bin

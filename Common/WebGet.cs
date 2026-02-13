@@ -1,4 +1,4 @@
-﻿namespace SquareSearchMain
+﻿namespace Common
 {
     public static class Web
     {
