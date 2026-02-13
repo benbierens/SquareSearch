@@ -3,5 +3,6 @@
   <Project Path="Logging/Logging.csproj" Id="2bc538f6-119e-4f1f-b07c-5bf46b6c2fb5" />
   <Project Path="MessageQueue/MessageQueue.csproj" Id="4fad544d-ffe8-45a4-b485-90d8382e5fb1" />
   <Project Path="SquareSearchMain/SquareSearchMain.csproj" />
+  <Project Path="UrlExtractor/UrlExtractor.csproj" Id="9a2e7ef2-9349-4024-9e95-345e6ceee166" />
   <Project Path="Visitor/Visitor.csproj" Id="ec6f2da6-320a-4eb0-811a-c5510a9eadc4" />
 </Solution>

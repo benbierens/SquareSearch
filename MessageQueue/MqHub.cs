@@ -13,10 +13,12 @@ namespace MessageQueue
             factory = new MqFactory(logger, hostname);
 
             UrlToVisit = new Queue<MsgUrlToVisit>(factory, "urltovisit");
-            RawPage = new Queue<MsgRawPage>(factory, "rawpage");
+            PageToIndex = new Queue<MsgRawPage>(factory, "pagetoindex");
+            PageToUrls = new Queue<MsgRawPage>(factory, "pagetourls");
         }
 
         public IQueue<MsgUrlToVisit> UrlToVisit { get; }
-        public IQueue<MsgRawPage> RawPage { get; }
+        public IQueue<MsgRawPage> PageToIndex { get; }
+        public IQueue<MsgRawPage> PageToUrls { get; }
     }
 }

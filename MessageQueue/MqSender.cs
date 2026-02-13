@@ -43,7 +43,7 @@ namespace MessageQueue
         {
             try
             {
-                logger.Trace($"{nameof(Send)}<{typeof(T).Name}>");
+                //logger.Trace($"{nameof(Send)}<{typeof(T).Name}>");
                 var str = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(str);
 

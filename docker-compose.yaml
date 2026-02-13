@@ -3,14 +3,43 @@ services:
     build:
       context: .
       dockerfile: ./Visitor/Dockerfile
+    environment:
+      MQHOST: rabbitmq
+      LOGTRACE: 1
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      mode: replicated
+      replicas: 3
+  
+  urlextractor:
+    build:
+      context: .
+      dockerfile: ./UrlExtractor/Dockerfile
+    environment:
+      MQHOST: rabbitmq
+      LOGTRACE: 1
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      mode: replicated
+      replicas: 1
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:4-management
     ports:
       - 5672:5672
       - 15672:15672
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   postgres:
     image: postgres:16

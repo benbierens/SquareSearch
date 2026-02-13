@@ -62,10 +62,13 @@
     public class SinkingLogger : ILogger
     {
         private readonly ILogSink sink;
+        private readonly bool doTrace = true;
 
         public SinkingLogger(ILogSink sink)
         {
             this.sink = sink;
+
+            if (Environment.GetEnvironmentVariable("LOGTRACE") == "0") doTrace = false;
         }
 
         public void Error(string msg, Exception ex)
@@ -90,6 +93,7 @@
 
         public void Trace(string msg)
         {
+            if (!doTrace) return;
             sink.Write($"TRACE {msg}");
         }
     }

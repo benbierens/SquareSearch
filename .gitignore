@@ -9,3 +9,5 @@ Common/bin
 Logging/bin
 MessageQueue/bin
 Visitor/bin
+UrlExtractor/obj
+UrlExtractor/bin
