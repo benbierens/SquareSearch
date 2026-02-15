@@ -37,6 +37,7 @@ public class UrlExtractApp : MqHubApp, IMqMessageHandler<MsgRawPage>
         }
 
         Logger.Info($"Page '{message.Url}' yielded {hits} urls.");
+        await ack.AckMessage();
     }
 
     private async Task<bool> Consider(string s)
