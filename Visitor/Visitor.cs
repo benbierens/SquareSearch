@@ -30,8 +30,7 @@ public class VisitorApp : MqHubApp, IMqMessageHandler<MsgUrlToVisit>
         var start = DateTime.UtcNow;
         Logger.Trace($"Visiting '{message.Url}'...");
 
-        var page = await Web.Get(message.Url);
-        var rawPage = new MsgRawPage(message.Url, page);
+        var rawPage = await TryVisit(message.Url);
 
         await Hub.PageToIndex.Send(rawPage);
         await Hub.PageToUrls.Send(rawPage);
@@ -39,6 +38,30 @@ public class VisitorApp : MqHubApp, IMqMessageHandler<MsgUrlToVisit>
 
         var span = DateTime.UtcNow - start;
         Logger.Info($"Visited '{message.Url}' in {span.TotalSeconds} seconds.");
+    }
+
+    private async Task<MsgRawPage> TryVisit(string url, int retry = 0)
+    {
+        if (retry > 2) return new MsgRawPage(url, string.Empty);
+
+        var page = await InternalTryVisit(url);
+        if (page != null) return page;
+
+        await Task.Delay(TimeSpan.FromMinutes(1));
+        return await TryVisit(url, retry + 1);
+    }
+
+    private async Task<MsgRawPage?> InternalTryVisit(string url)
+    {
+        try
+        {
+            var page = await Web.Get(url);
+            return new MsgRawPage(url, page);
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
     private async Task CheckDelay()

@@ -26,7 +26,9 @@ namespace SquareSearchMain
 
             if (!robots.IsAllowed(url)) return;
 
-            var content = Web.Get(url);
+            var task = Web.Get(url);
+            task.Wait();
+            var content = task.Result;
 
             handler.OnContent(new RawPage(url, content));
         }

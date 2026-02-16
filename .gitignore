@@ -11,3 +11,7 @@ MessageQueue/bin
 Visitor/bin
 UrlExtractor/obj
 UrlExtractor/bin
+DbUrls/obj
+DbUrls/bin
+UrlQueuer/bin
+UrlQueuer/obj
