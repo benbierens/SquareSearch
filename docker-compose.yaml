@@ -12,7 +12,9 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-  
+    volumes:
+      - visitor_logs:/logs
+
   urlextractor:
     build:
       context: .
@@ -31,7 +33,9 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-
+    volumes:
+      - urlextractor_logs:/logs
+  
   urlqueuer:
     build:
       context: .
@@ -51,6 +55,8 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+    volumes:
+      - urlqueuer_logs:/logs
 
   rabbitmq:
     container_name: rabbitmq
@@ -104,3 +110,24 @@ volumes:
   postgres_urls_data:
   postgres_index_data:
   rabbitmq_data:
+  
+  visitor_logs:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./logs
+  
+  urlextractor_logs:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./logs
+  
+  urlqueuer_logs:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./logs

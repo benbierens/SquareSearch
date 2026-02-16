@@ -9,19 +9,6 @@
         ILogger Prefix(string prefix);
     }
 
-    public interface ILogSink
-    {
-        void Write(string msg);
-    }
-
-    public class ConsoleSink : ILogSink
-    {
-        public void Write(string msg)
-        {
-            Console.WriteLine(msg);
-        }
-    }
-
     public class PrefixingLoggger : ILogger
     {
         private readonly ILogger backingLogger;

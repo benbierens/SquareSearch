@@ -12,7 +12,11 @@ namespace Common
 
         public MqHubApp()
         {
-            var sink = new ConsoleSink();
+            var sink = new MuxingSink(
+                new ConsoleSink(),
+                new FileSink($"/logs/{Environment.MachineName}/{Name.ToLowerInvariant()}.log")
+            );
+                
             Logger = new PrefixingLoggger(
                 new SinkingLogger(sink), Name);
 
