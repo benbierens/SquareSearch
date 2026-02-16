@@ -17,3 +17,5 @@ UrlQueuer/bin
 UrlQueuer/obj
 data
 logs
+Indexer/obj
+Indexer/bin

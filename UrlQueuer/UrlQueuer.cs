@@ -65,11 +65,9 @@ public class UrlQueuer : MqHubApp
             {
                 if (host.EndsWith(a))
                 {
-                    Logger.Info("Allowed: " + hit);
                     return true;
                 }
             }
-            Logger.Info("Disallowed: " + hit);
             return false;
         }
         catch (Exception ex)

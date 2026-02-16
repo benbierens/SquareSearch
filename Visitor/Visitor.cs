@@ -14,7 +14,13 @@ public class VisitorApp : MqHubApp, IMqMessageHandler<MsgUrlToVisit>
     protected override string Name => "Visitor";
 
     private readonly Random random = new Random();
+    private readonly int maxQueueLength;
     private int checkDelay = 100;
+
+    public VisitorApp()
+    {
+        maxQueueLength = Convert.ToInt32(Environment.GetEnvironmentVariable("MAX_QUEUE"));
+    }
 
     public async Task Run()
     {
@@ -70,7 +76,7 @@ public class VisitorApp : MqHubApp, IMqMessageHandler<MsgUrlToVisit>
         if (checkDelay > 0) return;
 
         var queueLength = await Hub.PageToIndex.GetQueueLength();
-        if (queueLength > 1000)
+        if (queueLength > maxQueueLength)
         {
             Logger.Info("Applying delay...");
             await Task.Delay(TimeSpan.FromMinutes(10 + random.Next(0, 10)));

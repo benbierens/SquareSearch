@@ -6,6 +6,7 @@ services:
     environment:
       MQHOST: rabbitmq
       LOGTRACE: 1
+      MAX_QUEUE: 100
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -58,6 +59,27 @@ services:
       replicas: 1
     volumes:
       - urlqueuer_logs:/logs
+
+  indexer:
+    build:
+      context: .
+      dockerfile: ./Indexer/Dockerfile
+    environment:
+      MQHOST: rabbitmq
+      LOGTRACE: 1
+      DBHOST: dbindex
+      DBLOGIN: squaresearch
+      DBPASSWORD: squaresearchpw
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres_urls:
+        condition: service_healthy
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - indexer_logs:/logs
 
   rabbitmq:
     container_name: rabbitmq
@@ -144,6 +166,13 @@ volumes:
       device: ./logs
   
   urlqueuer_logs:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./logs
+  
+  indexer_logs:
     driver: local
     driver_opts:
       o: bind
