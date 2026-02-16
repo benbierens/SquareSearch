@@ -12,6 +12,9 @@ namespace DbUrls
 
     public class IndexContext : BaseContext
     {
-
+        // useful_words uniqueness with weight
+        // count: link word to scan
+        // scan: utc and url
+        // url uniqueness
     }
 }
