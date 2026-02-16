@@ -13,6 +13,7 @@ public class UrlQueuer : MqHubApp
 {
     private readonly UrlsDb urls;
     private readonly TimeSpan revisitDelay;
+    private readonly string[] allowedDomains;
     protected override string Name => "UrlQueuer";
 
     public UrlQueuer()
@@ -23,6 +24,11 @@ public class UrlQueuer : MqHubApp
         if (string.IsNullOrEmpty(minutes)) throw new Exception("Missing envvar REVISIT_MINUTES");
         revisitDelay = TimeSpan.FromMinutes(Convert.ToInt32(minutes));
         if (revisitDelay < TimeSpan.FromMinutes(1)) revisitDelay = TimeSpan.FromMinutes(1);
+
+        var d = Environment.GetEnvironmentVariable("ALLOWED_DOMAINS");
+        if (string.IsNullOrEmpty(d)) throw new Exception("Missing envvar: ALLOWED_DOMAINS");
+        allowedDomains = d.Split(';', StringSplitOptions.RemoveEmptyEntries & StringSplitOptions.TrimEntries);
+        if (allowedDomains.Length == 0) throw new Exception("No ALLOWED_DOMAINS");
     }
 
     public async Task Init()
@@ -36,10 +42,40 @@ public class UrlQueuer : MqHubApp
 
         foreach (var hit in hits)
         {
-            await Hub.UrlToVisit.Send(new MessageQueue.MsgUrlToVisit(hit));
+            if (IsAllowed(hit))
+            {
+                await Hub.UrlToVisit.Send(new MessageQueue.MsgUrlToVisit(hit));
+            }
         }
+
+        await urls.UpdateLastQueued(hits);
+
         Logger.Info($"Queued {hits.Length} URLs");
 
         await Task.Delay(revisitDelay / 3);
+    }
+
+    private bool IsAllowed(string hit)
+    {
+        try
+        {
+            var u = new Uri(hit);
+            var host = u.Host; // for example: skills.github.com
+            foreach (var a in allowedDomains)
+            {
+                if (host.EndsWith(a))
+                {
+                    Logger.Info("Allowed: " + hit);
+                    return true;
+                }
+            }
+            Logger.Info("Disallowed: " + hit);
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"Unable to parse URL '{hit}'", ex);
+            return false;
+        }
     }
 }

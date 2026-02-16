@@ -4,6 +4,12 @@ Console.WriteLine("Hello, World!");
 Console.WriteLine("1. build index");
 Console.WriteLine("2. perform search");
 
+var things = new Uri("https://skills.github.com");
+Console.WriteLine("things: " + things);
+Console.WriteLine("host: " + things.Host);
+
+return;
+
 var urlQueue = new CrawlQueue();
 urlQueue.Start();
 urlQueue.Push("http://bencc.nl");

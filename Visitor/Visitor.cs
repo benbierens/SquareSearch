@@ -58,7 +58,7 @@ public class VisitorApp : MqHubApp, IMqMessageHandler<MsgUrlToVisit>
             var page = await Web.Get(url);
             return new MsgRawPage(url, page);
         }
-        catch (Exception ex)
+        catch
         {
             return null;
         }

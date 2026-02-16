@@ -47,6 +47,7 @@ services:
       DBLOGIN: squaresearch
       DBPASSWORD: squaresearchpw
       REVISIT_MINUTES: 1
+      ALLOWED_DOMAINS: bencc.nl
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -108,9 +109,26 @@ services:
 
 volumes:
   postgres_urls_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./data/urls
+
   postgres_index_data:
-  rabbitmq_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./data/index
   
+  rabbitmq_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./data/mq
+
   visitor_logs:
     driver: local
     driver_opts:
