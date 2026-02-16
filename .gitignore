@@ -15,3 +15,5 @@ DbUrls/obj
 DbUrls/bin
 UrlQueuer/bin
 UrlQueuer/obj
+data
+logs
