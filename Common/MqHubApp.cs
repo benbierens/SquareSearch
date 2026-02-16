@@ -1,5 +1,6 @@
 ﻿using Logging;
 using MessageQueue;
+using System.Net;
 
 namespace Common
 {
@@ -14,17 +15,17 @@ namespace Common
         {
             var sink = new MuxingSink(
                 new ConsoleSink(),
-                new FileSink($"/logs/{Environment.MachineName}/{Name.ToLowerInvariant()}.log")
+                new FileSink($"/logs/{Dns.GetHostName()}/{Name.ToLowerInvariant()}.log")
             );
-                
+
             Logger = new PrefixingLoggger(
                 new SinkingLogger(sink), Name);
 
-            var queueHost = Environment.GetEnvironmentVariable("MQHOST");
+            var queueHost = "a";// Environment.GetEnvironmentVariable("MQHOST");
             Logger.Info($"MQHOST = {queueHost}");
             if (string.IsNullOrEmpty(queueHost)) throw new ArgumentNullException();
 
-            Hub = new MqHub(Logger, queueHost);
+            Hub = null!;// new MqHub(Logger, queueHost);
         }
     }
 }

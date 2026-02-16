@@ -135,14 +135,14 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ./data/urls
+      device: ./data/urls/db
 
   postgres_index_data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: ./data/index
+      device: ./data/index/db
   
   rabbitmq_data:
     driver: local

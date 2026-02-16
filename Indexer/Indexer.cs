@@ -1,4 +1,5 @@
 ﻿using Common;
+using Indexer;
 using MessageQueue;
 
 var indexer = new IndexerApp();
@@ -12,9 +13,11 @@ while (true)
 public class IndexerApp : MqHubApp, IMqMessageHandler<MsgRawPage>
 {
     protected override string Name => "Indexer";
+    private readonly HtmlParser parser;
 
     public IndexerApp()
     {
+        parser = new HtmlParser(Logger);
     }
 
     public async Task Run()
@@ -26,6 +29,10 @@ public class IndexerApp : MqHubApp, IMqMessageHandler<MsgRawPage>
     {
         Logger.Trace($"Indexing '{message.Url}'...");
 
+        var segments = parser.Parse(message.Content);
+        // todo: tokenize, and store!
 
+        Logger.Info("done!");
+        await ack.AckMessage();
     }
 }

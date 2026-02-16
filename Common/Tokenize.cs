@@ -11,8 +11,7 @@
                 .Replace("! ", " ")
                 .Replace("'", " ")
                 .Replace("\"", " ")
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Select(t => t.Trim())
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries & StringSplitOptions.TrimEntries)
                 .ToArray();
         }
     }
